@@ -8,9 +8,9 @@ from aws_cdk.pipelines import CodePipeline
 from aws_cdk.pipelines import CodePipelineSource
 from aws_cdk.pipelines import ShellStep
 
-github_repository = 'rafty/cdk_eks_pipeline_blueprint'
+github_repository = 'rafty/eks_app_pipeline'
 github_action = ('arn:aws:codestar-connections:ap-northeast-1:338456725408:'
-                 'connection/f0adad55-8456-4682-8d27-3e8b4dfa618b')
+                 'connection/81ccd08e-fe91-4a79-a459-398ae1b84aff')
 pipeline_name = 'eks-app-1'
 
 

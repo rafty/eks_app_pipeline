@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 from aws_cdk import core as cdk
-from pipeline.pipeline import PipelineStack
+from pipeline.pipeline_stack import PipelineStack
 
 env = cdk.Environment(
     account=os.environ.get("CDK_DEPLOY_ACCOUNT", os.environ["CDK_DEFAULT_ACCOUNT"]),

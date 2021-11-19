@@ -14,7 +14,7 @@ class DockerBuildStage(cdk.Stage):
 
         self._ecr_stack = EcrStack(
             scope=self,
-            id='EcrStack',
+            construct_id='EcrStack',
             env=env)
 
     @property

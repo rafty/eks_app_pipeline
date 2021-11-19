@@ -10,10 +10,10 @@ from aws_cdk.pipelines import ShellStep
 from pipeline.stages.docker_build import DockerBuildStage
 
 
-github_repository = 'rafty/eks_app_pipeline'
-github_action = ('arn:aws:codestar-connections:ap-northeast-1:338456725408:'
-                 'connection/81ccd08e-fe91-4a79-a459-398ae1b84aff')
-container_image_name = 'eks-demo-app'
+# github_repository = 'rafty/eks_app_pipeline'
+# github_action = ('arn:aws:codestar-connections:ap-northeast-1:338456725408:'
+#                  'connection/81ccd08e-fe91-4a79-a459-398ae1b84aff')
+# container_image_name = 'eks-demo-app'
 
 
 class PipelineStack(cdk.Stack):
@@ -25,6 +25,13 @@ class PipelineStack(cdk.Stack):
                  **kwargs) -> None:
 
         super().__init__(scope, construct_id, **kwargs)
+
+        # ----------------------------------------
+        # Get a value from a context variable (cdk.json)
+        # ----------------------------------------
+        github_repository = self.node.try_get_context("github_repository")
+        github_action = self.node.try_get_context("github_action")
+        container_image_name = self.node.try_get_context("container_image_name")
 
         # ----------------------------------------
         # Source

@@ -12,6 +12,14 @@ class EcrStack(cdk.Stack):
 
         super().__init__(scope, construct_id, **kwargs)
 
+        # ----------------------------------------
+        # Get a value from a context variable (cdk.json)
+        # ----------------------------------------
+        # github_repository = self.node.try_get_context("github_repository")
+        # github_action = self.node.try_get_context("github_action")
+        container_image_name = self.node.try_get_context("container_image_name")
+
+
         # remove_old_images = aws_ecr.LifecycleRule(
         #     description='Expire old images, keep 10 latest',
         #     rule_priority=1,
@@ -24,8 +32,10 @@ class EcrStack(cdk.Stack):
 
         ecr_repository = aws_ecr.Repository(
             scope=self,
-            id='eks_app1',
-            repository_name='eks_app1',
+            # id='eks_app1',
+            # repository_name='eks_app1',
+            id=f'{container_image_name}-repository',
+            repository_name=container_image_name,
             removal_policy=cdk.RemovalPolicy.DESTROY,
             image_scan_on_push=True
             # lifecycle_rules=[remove_old_images]

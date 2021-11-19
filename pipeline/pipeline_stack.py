@@ -122,6 +122,11 @@ class PipelineStack(cdk.Stack):
             effect=aws_iam.Effect.ALLOW,
             resources=['*']
         )
+        ssm_policy = aws_iam.PolicyStatement(
+            effect=aws_iam.Effect.ALLOW,
+            actions=['ssm:GetParameter'],
+            resources=[f'arn:aws:ssm:{region}:{account}:parameter/*']
+        )
         logs_policy = aws_iam.PolicyStatement(
             actions=['logs:GetLogEvents'],
             effect=aws_iam.Effect.ALLOW,
@@ -151,7 +156,8 @@ class PipelineStack(cdk.Stack):
             # role=codebuild_ecr_role  # Default: - A role is automatically created
             role_policy_statements=[
                 codebuild_ecr_policy,
-                logs_policy
+                logs_policy,
+                ssm_policy
             ]
         )
         # role - Custom execution role to be used for the CodeBuild project.

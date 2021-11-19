@@ -1,6 +1,7 @@
 from aws_cdk import core as cdk
 from aws_cdk import aws_iam
 from aws_cdk import aws_codebuild
+from aws_cdk import aws_ssm
 from aws_cdk.pipelines import CodePipeline
 from aws_cdk.pipelines import CodePipelineSource
 from aws_cdk.pipelines import StackSteps
@@ -127,6 +128,7 @@ class PipelineStack(cdk.Stack):
             resources=[f'arn:aws:logs:{region}:{account}:log-group:/aws/codebuild/*:*']
         )
 
+
         docker_build_step = CodeBuildStep(
             id='DockerBuildStep',
             input=github_source,
@@ -135,6 +137,11 @@ class PipelineStack(cdk.Stack):
             commands=[
                 f'aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}',
                 'cd app',  # Dockerfile in app directory
+                'echo --- Docker Hub login!! ---'
+                f'yum install -y jq'
+                f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",
+                f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' | jq --raw-output '.Parameters[0].Value')",
+                f'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER_ID --password-stdin'
                 # 'TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"',
                 # It may be better to use Tag instead of "latest".
                 f'docker build --tag {container_image_name} .',

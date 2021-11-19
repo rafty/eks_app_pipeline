@@ -124,7 +124,7 @@ class PipelineStack(cdk.Stack):
         )
         ssm_policy = aws_iam.PolicyStatement(
             effect=aws_iam.Effect.ALLOW,
-            actions=['ssm:GetParameter'],
+            actions=['ssm:GetParameters'],
             resources=[f'arn:aws:ssm:{region}:{account}:parameter/*']
         )
         logs_policy = aws_iam.PolicyStatement(
@@ -132,7 +132,6 @@ class PipelineStack(cdk.Stack):
             effect=aws_iam.Effect.ALLOW,
             resources=[f'arn:aws:logs:{region}:{account}:log-group:/aws/codebuild/*:*']
         )
-
 
         docker_build_step = CodeBuildStep(
             id='DockerBuildStep',

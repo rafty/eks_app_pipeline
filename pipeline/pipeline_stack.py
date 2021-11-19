@@ -124,7 +124,7 @@ class PipelineStack(cdk.Stack):
         )
         ssm_policy = aws_iam.PolicyStatement(
             effect=aws_iam.Effect.ALLOW,
-            actions=['ssm:GetParameters'],
+            actions=['ssm:GetParameter', 'ssm:GetParameters'],
             resources=[f'arn:aws:ssm:{region}:{account}:parameter/*']
         )
         logs_policy = aws_iam.PolicyStatement(
@@ -141,11 +141,11 @@ class PipelineStack(cdk.Stack):
             commands=[
                 f'aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}',
                 'cd app',  # Dockerfile in app directory
-                'echo --- Docker Hub login!! ---'
-                f'yum install -y jq'
+                'echo --- Docker Hub login!! ---',
+                f'yum install -y jq',
                 f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",
                 f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' | jq --raw-output '.Parameters[0].Value')",
-                f'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER_ID --password-stdin'
+                f'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER_ID --password-stdin',
                 # 'TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"',
                 # It may be better to use Tag instead of "latest".
                 f'docker build --tag {container_image_name} .',

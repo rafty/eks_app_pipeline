@@ -145,7 +145,7 @@ class PipelineStack(cdk.Stack):
                 # f'yum install -y jq',
                 # f'apt-get install -y jq',
                 f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",
-                f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' | jq --raw-output '.Parameters[0].Value')",
+                f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' --with-decryption | jq --raw-output '.Parameters[0].Value')",
                 # f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' --output json --query 'Parameters[0].Value')",
                 # f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' --with-decryption --output json --query 'Parameters[0].Value')",
                 # f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' --output json --query 'Parameters[0].Value' | sed 's/"//g')",

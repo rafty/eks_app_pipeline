@@ -142,7 +142,8 @@ class PipelineStack(cdk.Stack):
                 f'aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}',
                 'cd app',  # Dockerfile in app directory
                 'echo --- Docker Hub login!! ---',
-                f'yum install -y jq',
+                # f'yum install -y jq',
+                f'apt-get install -y jq',
                 f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",
                 f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' | jq --raw-output '.Parameters[0].Value')",
                 f'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER_ID --password-stdin',

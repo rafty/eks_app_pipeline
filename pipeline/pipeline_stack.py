@@ -143,9 +143,11 @@ class PipelineStack(cdk.Stack):
                 'cd app',  # Dockerfile in app directory
                 'echo --- Docker Hub login!! ---',
                 # f'yum install -y jq',
-                f'apt-get install -y jq',
-                f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",
-                f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' | jq --raw-output '.Parameters[0].Value')",
+                # f'apt-get install -y jq',
+                # f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",
+                # f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' | jq --raw-output '.Parameters[0].Value')",
+                f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' --output json --query 'Parameters[0].Value')",
+                f"DOCKERHUB_PASSWORD=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_PASSWORD' --with-decryption --output json --query 'Parameters[0].Value')",
                 f'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER_ID --password-stdin',
                 # 'TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"',
                 # It may be better to use Tag instead of "latest".

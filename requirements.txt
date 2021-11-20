@@ -54,5 +54,5 @@ aws-cdk.pipelines>=1.130.0
 aws-cdk.region-info>=1.130.0
 pyyaml
 pytest
-boto3
-flask
+# boto3
+# flask

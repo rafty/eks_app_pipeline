@@ -148,17 +148,29 @@ class PipelineStack(cdk.Stack):
                 f'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER_ID --password-stdin',
                 # # 'TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"',
                 # # It may be better to use Tag instead of "latest".
+                # ------------------------------------------------------------------------
+                # 成功
                 # f'docker build --tag {container_image_name} .',
-                # # f'docker tag {container_image_name}:latest {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
                 # f'docker tag {container_image_name}:latest {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
                 # f'docker push {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
+                # ------------------------------------------------------------------------
                 # 'IMAGE_TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"',
+                # 'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)',
+                # 'IMAGE_TAG=${COMMIT_HASH:=latest}',
+                # 'echo $IMAGE_TAG',
+                # f'docker build --tag {container_image_name}:latest .',
+                # f'docker tag {container_image_name}:latest {container_image_name}:$IMAGE_TAG',
+                # f'docker push {container_image_name}:latest',
+                # f'docker push {container_image_name}:$IMAGE_TAG',
+                # ------------------------------------------------------------------------
                 'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)',
                 'IMAGE_TAG=${COMMIT_HASH:=latest}',
+                'echo $IMAGE_TAG',
                 f'docker build --tag {container_image_name}:latest .',
-                f'docker tag {container_image_name}:latest {container_image_name}:$IMAGE_TAG',
-                f'docker push {container_image_name}:latest',
-                f'docker push {container_image_name}:$IMAGE_TAG',
+                f'docker tag {container_image_name}:latest {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:$IMAGE_TAG',
+                f'docker push {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
+                f'docker push {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:$IMAGE_TAG',
+
             ],
             # role=codebuild_ecr_role  # Default: - A role is automatically created
             role_policy_statements=[

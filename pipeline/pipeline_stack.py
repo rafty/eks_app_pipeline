@@ -1,11 +1,11 @@
 from aws_cdk import core as cdk
 from aws_cdk import aws_iam
-# from aws_cdk import aws_codebuild
-from aws_cdk import aws_ssm
+from aws_cdk import aws_codebuild
+# from aws_cdk import aws_ssm
 from aws_cdk.pipelines import CodePipeline
 from aws_cdk.pipelines import CodePipelineSource
 from aws_cdk.pipelines import StackSteps
-# from aws_cdk.pipelines import CodeBuildStep
+from aws_cdk.pipelines import CodeBuildStep
 from aws_cdk.pipelines import ShellStep
 from pipeline.stages.docker_build_stage import DockerBuildStage
 from steps.code_build_step import create_docker_build_step
@@ -157,4 +157,3 @@ class PipelineStack(cdk.Stack):
             stage=docker_build_stage,
             stack_steps=[stack_step],
         )
-

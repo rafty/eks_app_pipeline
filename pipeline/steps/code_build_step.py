@@ -60,7 +60,7 @@ def create_docker_build_step(
         commands=[
             'echo --- AWS ECR login. ---',
             f'aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}',
-            'echo --- Dockerfile in app directory'
+            'echo --- Dockerfile in app directory',
             'cd app',
             'echo --- Docker Hub login. ---',
             f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",

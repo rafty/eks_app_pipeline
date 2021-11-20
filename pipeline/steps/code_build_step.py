@@ -6,7 +6,8 @@ from aws_cdk.pipelines import CodePipelineSource
 
 
 def create_docker_build_step(
-        source: CodePipelineSource.connection,
+        # source: CodePipelineSource.connection,
+        github_source,
         container_image_name: str,
         env: cdk.Environment) -> CodeBuildStep:
 
@@ -53,7 +54,7 @@ def create_docker_build_step(
     # ----------------------------------------
     docker_build_step = CodeBuildStep(
         id='DockerBuildStep',
-        input=source,  # github source connection
+        input=github_source,  # github source connection
         build_environment=aws_codebuild.BuildEnvironment(privileged=True),  # for docker
         # install_commands=[],
         commands=[

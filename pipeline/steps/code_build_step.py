@@ -6,8 +6,8 @@ from aws_cdk.pipelines import CodePipelineSource
 
 
 def create_docker_build_step(
-        # source: CodePipelineSource.connection,
-        github_source,
+        source: CodePipelineSource.connection,
+        # github_source,
         container_image_name: str,
         env: cdk.Environment) -> CodeBuildStep:
 
@@ -54,13 +54,13 @@ def create_docker_build_step(
     # ----------------------------------------
     docker_build_step = CodeBuildStep(
         id='DockerBuildStep',
-        input=github_source,  # github source connection
+        input=source,  # github source connection
         build_environment=aws_codebuild.BuildEnvironment(privileged=True),  # for docker
         # install_commands=[],
         commands=[
             'echo --- AWS ECR login. ---',
             f'aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}',
-            'echo --- Dockerfile in app directory',
+            'echo --- Dockerfile in app directory. Change app directory ---',
             'cd app',
             'echo --- Docker Hub login. ---',
             f"DOCKERHUB_USER_ID=$(aws --region='{region}' ssm get-parameters --names '/CodeBuild/DOCKERHUB_USER_ID' | jq --raw-output '.Parameters[0].Value')",

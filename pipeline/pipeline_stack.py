@@ -164,8 +164,9 @@ class PipelineStack(cdk.Stack):
                 # f'docker push {container_image_name}:$IMAGE_TAG',
                 # ------------------------------------------------------------------------
                 # リファクタリング
-                'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)',
-                'IMAGE_TAG=${COMMIT_HASH:=latest}',
+                'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-8)',
+                # 'IMAGE_TAG=${COMMIT_HASH:=latest}',
+                'IMAGE_TAG=$(date +%Y-%m-%d.%H.%M.%S).${COMMIT_HASH:=latest}',
                 'echo $IMAGE_TAG',
                 f'USER_NAME={account}.dkr.ecr.{region}.amazonaws.com',
                 'echo $USER_NAME',

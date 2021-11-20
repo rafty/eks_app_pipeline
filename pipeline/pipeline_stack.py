@@ -163,14 +163,15 @@ class PipelineStack(cdk.Stack):
                 # f'docker push {container_image_name}:latest',
                 # f'docker push {container_image_name}:$IMAGE_TAG',
                 # ------------------------------------------------------------------------
+                # リファクタリング
                 'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)',
                 'IMAGE_TAG=${COMMIT_HASH:=latest}',
                 'echo $IMAGE_TAG',
-                f'docker build --tag {container_image_name}:latest .',
-                f'docker tag {container_image_name}:latest {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:$IMAGE_TAG',
-                f'docker push {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
-                f'docker push {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:$IMAGE_TAG',
-
+                f'USER_NAME={account}.dkr.ecr.{region}.amazonaws.com',
+                'echo $USER_NAME',
+                f'docker build --tag {container_image_name} .',
+                f'docker tag {container_image_name}:latest $USER_NAME/{container_image_name}:$IMAGE_TAG',
+                f'docker push $USER_NAME/{container_image_name}:$IMAGE_TAG',
             ],
             # role=codebuild_ecr_role  # Default: - A role is automatically created
             role_policy_statements=[

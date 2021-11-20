@@ -172,6 +172,7 @@ class PipelineStack(cdk.Stack):
                 'echo $USER_NAME',
                 f'docker build --tag {container_image_name} .',
                 f'docker tag {container_image_name}:latest $USER_NAME/{container_image_name}:$IMAGE_TAG',
+                f'docker push $USER_NAME/{container_image_name}:latest',
                 f'docker push $USER_NAME/{container_image_name}:$IMAGE_TAG',
             ],
             # role=codebuild_ecr_role  # Default: - A role is automatically created

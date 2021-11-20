@@ -153,8 +153,8 @@ class PipelineStack(cdk.Stack):
                 # f'docker tag {container_image_name}:latest {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
                 # f'docker push {account}.dkr.ecr.{region}.amazonaws.com/{container_image_name}:latest',
                 # 'IMAGE_TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"',
-                'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)'
-                'IMAGE_TAG=${COMMIT_HASH:=latest}'
+                'COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)',
+                'IMAGE_TAG=${COMMIT_HASH:=latest}',
                 f'docker build --tag {container_image_name}:latest .',
                 f'docker tag {container_image_name}:latest {container_image_name}:$IMAGE_TAG',
                 f'docker push {container_image_name}:latest',

@@ -138,7 +138,7 @@ class PipelineStack(cdk.Stack):
         # )
 
         docker_build_step = create_docker_build_step(
-            github_source,
+            source=github_source,
             container_image_name=container_image_name,
             env=env)
 
